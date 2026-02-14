@@ -1,4 +1,47 @@
 1. Basic skeleton implemented
 2. Day 1 architecture freeze completed successfully.
    Perception layer is modular, test-validated, and future-proofed for ML integration.
-3.
+
+==============================
+DAY 2 – TRAFFIC STATE ESTIMATION
+==============================
+
+Date: 2026-02-14
+
+Summary:
+Completed and frozen the Traffic State Estimation layer. This layer converts
+perceived vehicles into stable, lane-level and intersection-level traffic
+metrics for downstream signal control.
+
+Key Changes:
+- Fixed a critical semantic bug in waiting-time computation.
+  Previously, waiting time was measured from vehicle arrival.
+  Now, waiting time is measured from the moment the vehicle stops,
+  which is physically correct for traffic signal control.
+- Defined and froze immutable LaneState and IntersectionState interfaces.
+- Implemented explicit queue definition using:
+    - distance to stop line ≤ 30 m
+    - speed < 0.5 m/s
+- Added lane density metric (normalized per 100 m).
+- Added intersection-level aggregate metrics:
+    - total waiting time
+    - maximum queue length
+    - emergency presence and distance
+- Added exponential moving average (EMA) smoothing to reduce temporal noise.
+
+Validation:
+- Implemented automated validation tests for:
+    - queue length correctness
+    - waiting time accumulation
+    - memory cleanup for disappeared vehicles
+    - temporal stability of metrics
+- Verified that state estimation behaves consistently across timesteps.
+
+Status:
+- Traffic State Estimation is architecturally frozen for Days 2–5.
+- Interfaces are stable and ready for control logic integration (Day 3).
+
+Notes:
+- Thresholds (30 m, 0.5 m/s) are documented and tunable if needed,
+  but are frozen for current experiments.
+- This layer intentionally avoids control logic and learning.
