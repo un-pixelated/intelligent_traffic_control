@@ -1,0 +1,36 @@
+# Core
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+pyyaml>=6.0
+
+# Deep Learning (Metal acceleration for M4)
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.0.0  # YOLOv8
+
+# Tracking
+filterpy>=1.4.5  # Kalman filter
+lap>=0.4.0  # Linear assignment for ByteTrack
+
+# SUMO Interface
+traci>=1.15.0
+sumolib>=1.15.0
+
+# RL (we'll use stable-baselines3)
+stable-baselines3>=2.0.0
+gymnasium>=0.28.0
+
+# Visualization & Analysis
+matplotlib>=3.7.0
+seaborn>=0.12.0
+opencv-python>=4.8.0
+Pillow>=10.0.0
+tqdm>=4.65.0
+
+# Utilities
+scikit-learn>=1.3.0
+
+# Additional for Phase 2
+lap==0.4.0  # For ByteTrack
+cython-bbox==0.1.3  # Bounding box utilities

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edges xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/edges_file.xsd">
+    
+    <!-- Incoming edges (3 lanes each: 2 through + 1 left turn) -->
+    <edge id="N_in" from="north" to="center" numLanes="3" speed="13.89">
+        <lane index="0" allow="all"/>  <!-- Right/through -->
+        <lane index="1" allow="all"/>  <!-- Through -->
+        <lane index="2" allow="all"/>  <!-- Left turn -->
+    </edge>
+    
+    <edge id="S_in" from="south" to="center" numLanes="3" speed="13.89">
+        <lane index="0" allow="all"/>
+        <lane index="1" allow="all"/>
+        <lane index="2" allow="all"/>
+    </edge>
+    
+    <edge id="E_in" from="east" to="center" numLanes="3" speed="13.89">
+        <lane index="0" allow="all"/>
+        <lane index="1" allow="all"/>
+        <lane index="2" allow="all"/>
+    </edge>
+    
+    <edge id="W_in" from="west" to="center" numLanes="3" speed="13.89">
+        <lane index="0" allow="all"/>
+        <lane index="1" allow="all"/>
+        <lane index="2" allow="all"/>
+    </edge>
+    
+    <!-- Outgoing edges (2 lanes each) -->
+    <edge id="N_out" from="center" to="north_end" numLanes="2" speed="13.89"/>
+    <edge id="S_out" from="center" to="south_end" numLanes="2" speed="13.89"/>
+    <edge id="E_out" from="center" to="east_end" numLanes="2" speed="13.89"/>
+    <edge id="W_out" from="center" to="west_end" numLanes="2" speed="13.89"/>
+    
+</edges>

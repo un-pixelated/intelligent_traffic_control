@@ -1,0 +1,10 @@
+Scenario,Controller,Avg Wait (s),Avg Queue (m),Avg Stopped,Phase Changes,Emergencies
+Baseline,Fixed-Time,134.45,6.81,3.94,25,0
+Baseline,Adaptive,67.62,4.90,2.25,61,0
+Baseline,Adaptive+Emergency,66.00,4.79,2.19,61,0
+Single Emergency,Fixed-Time,3201.72,20.30,26.23,4,0
+Single Emergency,Adaptive,3323.67,20.86,27.23,1,0
+Single Emergency,Adaptive+Emergency,3320.05,20.83,27.22,1,1
+Peak Traffic,Fixed-Time,3486.37,19.01,25.64,7,0
+Peak Traffic,Adaptive,3762.88,19.70,26.59,13,0
+Peak Traffic,Adaptive+Emergency,3860.11,20.02,27.30,13,1

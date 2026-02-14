@@ -1,0 +1,116 @@
+# Intersection geometry configuration
+intersection:
+  center:
+    x: 200.0  # SUMO coordinates
+    y: 200.0
+  
+  # Define lanes with their properties
+  lanes:
+    # North approach (3 lanes)
+    N_in_0:
+      direction: "north"
+      approach: "N"
+      lane_index: 0
+      type: "through"
+      entry_line: {x: 200.0, y: 300.0}  # 100m north
+      stop_line: {x: 200.0, y: 205.0}   # 5m before center
+      
+    N_in_1:
+      direction: "north"
+      approach: "N"
+      lane_index: 1
+      type: "through"
+      entry_line: {x: 200.0, y: 300.0}
+      stop_line: {x: 200.0, y: 205.0}
+      
+    N_in_2:
+      direction: "north"
+      approach: "N"
+      lane_index: 2
+      type: "left_turn"
+      entry_line: {x: 200.0, y: 300.0}
+      stop_line: {x: 200.0, y: 205.0}
+    
+    # South approach (3 lanes)
+    S_in_0:
+      direction: "south"
+      approach: "S"
+      lane_index: 0
+      type: "through"
+      entry_line: {x: 200.0, y: 100.0}
+      stop_line: {x: 200.0, y: 195.0}
+      
+    S_in_1:
+      direction: "south"
+      approach: "S"
+      lane_index: 1
+      type: "through"
+      entry_line: {x: 200.0, y: 100.0}
+      stop_line: {x: 200.0, y: 195.0}
+      
+    S_in_2:
+      direction: "south"
+      approach: "S"
+      lane_index: 2
+      type: "left_turn"
+      entry_line: {x: 200.0, y: 100.0}
+      stop_line: {x: 200.0, y: 195.0}
+    
+    # East approach (3 lanes)
+    E_in_0:
+      direction: "east"
+      approach: "E"
+      lane_index: 0
+      type: "through"
+      entry_line: {x: 300.0, y: 200.0}
+      stop_line: {x: 205.0, y: 200.0}
+      
+    E_in_1:
+      direction: "east"
+      approach: "E"
+      lane_index: 1
+      type: "through"
+      entry_line: {x: 300.0, y: 200.0}
+      stop_line: {x: 205.0, y: 200.0}
+      
+    E_in_2:
+      direction: "east"
+      approach: "E"
+      lane_index: 2
+      type: "left_turn"
+      entry_line: {x: 300.0, y: 200.0}
+      stop_line: {x: 205.0, y: 200.0}
+    
+    # West approach (3 lanes)
+    W_in_0:
+      direction: "west"
+      approach: "W"
+      lane_index: 0
+      type: "through"
+      entry_line: {x: 100.0, y: 200.0}
+      stop_line: {x: 195.0, y: 200.0}
+      
+    W_in_1:
+      direction: "west"
+      approach: "W"
+      lane_index: 1
+      type: "through"
+      entry_line: {x: 100.0, y: 200.0}
+      stop_line: {x: 195.0, y: 200.0}
+      
+    W_in_2:
+      direction: "west"
+      approach: "W"
+      lane_index: 2
+      type: "left_turn"
+      entry_line: {x: 100.0, y: 200.0}
+      stop_line: {x: 195.0, y: 200.0}
+
+  # Lane width in meters
+  lane_width: 3.5
+  
+  # Virtual counting lines (distances from stop line)
+  counting_lines:
+    approach: 50.0   # Entry detection zone
+    queue: 20.0      # Queue measurement zone
+    stop: 0.0        # Stop line

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    
+    <tlLogic id="center" type="static" programID="0" offset="0">
+        <!-- Phase 0: North-South through (green) -->
+        <phase duration="30" state="GGGrrrGGGrrr"/>
+        <!-- Yellow transition -->
+        <phase duration="3" state="yyyrrryyyrrr"/>
+        
+        <!-- Phase 1: East-West through (green) -->
+        <phase duration="30" state="rrrGGGrrrGGG"/>
+        <!-- Yellow transition -->
+        <phase duration="3" state="rrryyyrrryyy"/>
+    </tlLogic>
+    
+</additional>

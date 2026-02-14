@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    
+    <!-- Vehicle types -->
+    <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="5.0" 
+           minGap="2.5" maxSpeed="50" guiShape="passenger"/>
+    <vType id="truck" accel="1.8" decel="4.0" sigma="0.5" length="12.0" 
+           minGap="3.0" maxSpeed="40" guiShape="truck"/>
+    <vType id="ambulance" accel="3.0" decel="5.0" sigma="0.3" length="6.0" 
+           minGap="2.5" maxSpeed="50" guiShape="emergency" color="1,0,0"/>
+    <vType id="fire_truck" accel="2.5" decel="4.5" sigma="0.3" length="8.0" 
+           minGap="3.0" maxSpeed="45" guiShape="firebrigade" color="1,0,0"/>
+    
+    <!-- Routes (all possible paths through intersection) -->
+    <!-- North to South (through) -->
+    <route id="N_S" edges="N_in S_out"/>
+    <!-- North to East (left turn) -->
+    <route id="N_E" edges="N_in E_out"/>
+    
+    <!-- South to North -->
+    <route id="S_N" edges="S_in N_out"/>
+    <!-- South to West -->
+    <route id="S_W" edges="S_in W_out"/>
+    
+    <!-- East to West -->
+    <route id="E_W" edges="E_in W_out"/>
+    <!-- East to South -->
+    <route id="E_S" edges="E_in S_out"/>
+    
+    <!-- West to East -->
+    <route id="W_E" edges="W_in E_out"/>
+    <!-- West to North -->
+    <route id="W_N" edges="W_in N_out"/>
+    
+    <!-- Traffic flows (vehicles/hour) -->
+    <!-- Normal traffic (80% through, 20% turning) -->
+    <flow id="flow_N_S" type="car" route="N_S" begin="0" end="3600" 
+          vehsPerHour="300" departSpeed="max"/>
+    <flow id="flow_N_E" type="car" route="N_E" begin="0" end="3600" 
+          vehsPerHour="75" departSpeed="max"/>
+    
+    <flow id="flow_S_N" type="car" route="S_N" begin="0" end="3600" 
+          vehsPerHour="300" departSpeed="max"/>
+    <flow id="flow_S_W" type="car" route="S_W" begin="0" end="3600" 
+          vehsPerHour="75" departSpeed="max"/>
+    
+    <flow id="flow_E_W" type="car" route="E_W" begin="0" end="3600" 
+          vehsPerHour="250" departSpeed="max"/>
+    <flow id="flow_E_S" type="car" route="E_S" begin="0" end="3600" 
+          vehsPerHour="60" departSpeed="max"/>
+    
+    <flow id="flow_W_E" type="car" route="W_E" begin="0" end="3600" 
+          vehsPerHour="250" departSpeed="max"/>
+    <flow id="flow_W_N" type="car" route="W_N" begin="0" end="3600" 
+          vehsPerHour="60" departSpeed="max"/>
+    
+    <!-- Occasional trucks (5% of traffic) -->
+    <flow id="flow_trucks_N" type="truck" route="N_S" begin="0" end="3600" 
+          vehsPerHour="20" departSpeed="max"/>
+    <flow id="flow_trucks_E" type="truck" route="E_W" begin="0" end="3600" 
+          vehsPerHour="15" departSpeed="max"/>
+    
+    <!-- Emergency vehicles (rare, specific scenarios) -->
+    <!-- We'll inject these programmatically during simulation -->
+    
+</routes>
