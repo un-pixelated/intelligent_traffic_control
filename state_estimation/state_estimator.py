@@ -7,6 +7,7 @@ import numpy as np
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 
+from perception.types import PerceivedVehicle
 from state_estimation.lane_state_tracker import LaneStateTracker, LaneState
 from state_estimation.queue_estimator import QueueEstimator
 from state_estimation.smoothing import MultiVariableEMA
@@ -63,7 +64,7 @@ class TrafficStateEstimator:
         
         print(f"✓ State estimator ready ({len(lane_ids)} lanes)")
     
-    def update(self, perceived_vehicles: List, current_time: float) -> IntersectionState:
+    def update(self, perceived_vehicles: List[PerceivedVehicle], current_time: float) -> IntersectionState:
         """
         Update state estimation with new perception data
         

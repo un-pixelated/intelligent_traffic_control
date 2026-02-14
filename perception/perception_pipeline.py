@@ -5,27 +5,14 @@ Produces structured vehicle information for control system.
 
 import numpy as np
 from typing import List, Dict, Optional, Tuple
-from dataclasses import dataclass
 import cv2
 
+from perception.types import PerceivedVehicle
+from perception.emergency_detection import EmergencyVehicleDetector
 from perception.detector import VehicleDetector
 from perception.tracker import ByteTracker, Track
 from perception.lane_mapper import LaneMapper
 from perception.distance_estimator import KalmanDistanceEstimator
-
-
-@dataclass
-class PerceivedVehicle:
-    """Complete vehicle information after perception"""
-    track_id: int
-    bbox: Tuple[float, float, float, float]
-    class_name: str
-    position: Tuple[float, float]  # World coordinates
-    velocity: Tuple[float, float]  # World velocity (m/s)
-    lane_id: Optional[str]
-    distance_to_stop_line: float
-    is_emergency: bool
-    confidence: float
 
 
 class PerceptionPipeline:
@@ -61,9 +48,6 @@ class PerceptionPipeline:
         # Camera parameters
         self.camera_scale = camera_scale
         self.intersection_center = intersection_center
-        
-        # Emergency vehicle detection (simple rule-based)
-        self.emergency_keywords = ['ambulance', 'fire', 'emergency']
         
         print("✓ Perception pipeline ready")
     
@@ -110,8 +94,9 @@ class PerceptionPipeline:
                 dist_to_stop = -1.0
             
             # Check if emergency vehicle
-            is_emergency = any(keyword in track.class_name.lower() 
-                             for keyword in self.emergency_keywords)
+            is_emergency = EmergencyVehicleDetector.is_emergency_vision(
+                track.class_name
+            )
             
             # Create perceived vehicle
             vehicle = PerceivedVehicle(

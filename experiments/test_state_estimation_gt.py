@@ -8,7 +8,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from simulation.sumo_interface import SUMOInterface
-from perception.ground_truth_perception import GroundTruthPerception
+from perception.sumo_adapter import SumoPerceptionAdapter
 from perception.lane_mapper import LaneMapper
 from state_estimation.state_estimator import TrafficStateEstimator
 import matplotlib.pyplot as plt
@@ -33,7 +33,7 @@ def main():
     
     print("2. Initializing ground truth perception...")
     lane_mapper = LaneMapper(str(intersection_config))
-    perception = GroundTruthPerception(lane_mapper)
+    perception = SumoPerceptionAdapter(sumo, lane_mapper)
     
     print("3. Initializing state estimator...")
     lane_ids = [f"{a}_in_{i}" for a in ['N', 'S', 'E', 'W'] for i in range(3)]
@@ -57,11 +57,8 @@ def main():
             sumo.step()
             current_time = sumo.get_current_time()
             
-            # Get ground truth vehicles from SUMO
-            sumo_vehicles = sumo.get_all_vehicles()
-            
-            # Convert to perceived vehicles
-            perceived_vehicles = perception.process_sumo_vehicles(sumo_vehicles)
+            # Get ground truth vehicles from SUMO via perception adapter
+            perceived_vehicles = perception.perceive(current_time)
             
             # State estimation
             intersection_state = state_estimator.update(perceived_vehicles, current_time)

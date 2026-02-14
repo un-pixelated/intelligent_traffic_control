@@ -8,7 +8,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from simulation.sumo_interface import SUMOInterface
-from perception.ground_truth_perception import GroundTruthPerception
+from perception.sumo_adapter import SumoPerceptionAdapter
 from perception.lane_mapper import LaneMapper
 from state_estimation.state_estimator import TrafficStateEstimator
 from control.fixed_time_controller import FixedTimeController
@@ -31,7 +31,7 @@ def run_experiment(controller, controller_name: str, duration: int = 300):
     sumo.start()
     
     lane_mapper = LaneMapper(str(intersection_config))
-    perception = GroundTruthPerception(lane_mapper)
+    perception = SumoPerceptionAdapter(sumo, lane_mapper)
     
     lane_ids = [f"{a}_in_{i}" for a in ['N', 'S', 'E', 'W'] for i in range(3)]
     state_estimator = TrafficStateEstimator(lane_ids, enable_smoothing=True)
@@ -53,8 +53,7 @@ def run_experiment(controller, controller_name: str, duration: int = 300):
             current_time = sumo.get_current_time()
             
             # Perception & state estimation
-            sumo_vehicles = sumo.get_all_vehicles()
-            perceived = perception.process_sumo_vehicles(sumo_vehicles)
+            perceived = perception.perceive(current_time)
             state = state_estimator.update(perceived, current_time)
             
             # Control

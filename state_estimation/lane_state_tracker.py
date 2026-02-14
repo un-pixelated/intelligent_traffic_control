@@ -9,6 +9,8 @@ from dataclasses import dataclass, field
 from collections import deque
 import time
 
+from perception.types import PerceivedVehicle
+
 
 @dataclass
 class LaneState:
@@ -67,7 +69,7 @@ class LaneStateTracker:
         
         print(f"✓ Initialized tracker for {len(lane_ids)} lanes")
     
-    def update(self, perceived_vehicles: List, current_time: float):
+    def update(self, perceived_vehicles: List[PerceivedVehicle], current_time: float):
         """
         Update lane states based on perceived vehicles
         
