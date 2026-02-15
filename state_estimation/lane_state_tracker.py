@@ -92,14 +92,16 @@ class LaneStateTracker:
         Args:
             lane_ids: List of lane IDs to track
             history_length: Number of timesteps to keep in history
+        
+        CRITICAL: No LaneState objects are created here.
+        All states are created in update() with proper timestamps.
         """
         self.lane_ids = lane_ids
         self.history_length = history_length
         
-        # Current state for each lane
-        self.current_states: Dict[str, LaneState] = {
-            lid: LaneState(lane_id=lid) for lid in lane_ids
-        }
+        # Current state for each lane - EMPTY until first update()
+        # Invariant: After first update(), contains exactly one entry per lane_id
+        self.current_states: Dict[str, LaneState] = {}
         
         # Historical states (for smoothing and analysis)
         self.state_history: Dict[str, deque] = {
@@ -119,11 +121,17 @@ class LaneStateTracker:
         """
         Update lane states based on perceived vehicles.
         
+        Creates a complete snapshot: one LaneState per lane_id, every timestep.
+        Empty lanes produce zero-valued states (not missing entries).
+        
         Args:
             perceived_vehicles: List of PerceivedVehicle objects
             current_time: Current simulation time in seconds
+        
+        Postcondition: len(self.current_states) == len(self.lane_ids)
         """
         # Group vehicles by lane first (for efficiency)
+        # CRITICAL: Initialize ALL lanes, even those with no vehicles
         vehicles_by_lane: Dict[str, List[PerceivedVehicle]] = {
             lid: [] for lid in self.lane_ids
         }
@@ -146,12 +154,17 @@ class LaneStateTracker:
         self._update_stop_times(perceived_vehicles, current_time)
         
         # Compute state for each lane
+        # INVARIANT: Create state for EVERY lane, even if empty
         new_states = {}
         for lane_id in self.lane_ids:
             vehicles = vehicles_by_lane[lane_id]
             new_states[lane_id] = self._compute_lane_state(
                 lane_id, vehicles, current_time
             )
+        
+        # INVARIANT CHECK: Complete snapshot guarantee
+        assert len(new_states) == len(self.lane_ids), \
+            f"Incomplete snapshot: {len(new_states)} states for {len(self.lane_ids)} lanes"
         
         # Update current states and history
         self.current_states = new_states

@@ -293,12 +293,16 @@ class TrafficStateEstimator:
         Reset state estimator for new simulation episode.
         
         Clears all history and tracking data.
+        Returns to initialization state (no LaneState objects exist).
         """
-        # Reset lane tracker
+        # Reset lane tracker to empty state (like __init__)
+        self.lane_tracker.current_states.clear()
+        
+        # Clear history for all lanes
         for lane_id in self.lane_ids:
-            self.lane_tracker.current_states[lane_id] = LaneState(lane_id=lane_id)
             self.lane_tracker.state_history[lane_id].clear()
         
+        # Clear vehicle tracking
         self.lane_tracker.vehicle_first_seen.clear()
         self.lane_tracker.vehicle_stop_time.clear()
         self.lane_tracker.vehicle_last_speed.clear()
