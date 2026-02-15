@@ -1,0 +1,103 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.env
+.venv/
+venv/
+ENV/
+pip-wheel-metadata/
+
+# =========================
+# macOS (because Apple)
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# =========================
+# IDEs / Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Simulation Output (IMPORTANT)
+# =========================
+output/
+results/
+logs/
+
+# Frame dumps & videos
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.avi
+*.mov
+
+# But keep example images if you ever add them
+!docs/images/
+!docs/images/**
+
+# =========================
+# SUMO / Simulation Artifacts
+# =========================
+*.net.xml
+*.rou.xml
+*.add.xml
+*.sumocfg
+*.cfg
+*.trip.xml
+*.edg.xml
+*.nod.xml
+*.tll.xml
+
+# SUMO runtime junk
+sumo_log.txt
+tripinfo.xml
+vehroutes.xml
+tls_states.xml
+
+# =========================
+# Models / Weights
+# =========================
+models/*.pt
+models/*.onnx
+models/*.pth
+models/*.h5
+
+# =========================
+# Data dumps / evaluation
+# =========================
+data/generated/
+evaluation/output/
+*.csv
+*.npy
+*.npz
+
+# =========================
+# OS / Misc
+# =========================
+*.log
+*.tmp
+*.bak
+*.cache
+
+# =========================
+# Packaging
+# =========================
+dist/
+build/
