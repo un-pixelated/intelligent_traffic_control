@@ -1,17 +1,32 @@
 """
 Main signal controller integrating adaptive control and emergency priority.
 Acts as arbiter between normal operation and emergency preemption.
+
+Day 3: Uses clean circuit breaker pattern with emergency controller.
 """
 
 from control.adaptive_controller import AdaptiveController
 from control.emergency_priority import EmergencyPriorityController
-from control.signal_phases import PhaseType
+from control.signal_phases import PhaseType, SignalPhaseController
 
 
 class IntegratedSignalController:
     """
-    Integrated signal controller.
+    Integrated signal controller - Day 3 Production Version.
+    
     Combines adaptive control with emergency vehicle priority.
+    Emergency controller has absolute priority when active.
+    
+    Architecture:
+        - Normal operation: adaptive_controller runs
+        - Emergency detected: emergency_controller overrides
+        - Clean handoff: normal controller unaware of override
+        
+    Circuit Breaker Pattern:
+        if emergency_controller.is_active():
+            return emergency_signal
+        else:
+            return normal_controller_signal
     """
     
     def __init__(self):
@@ -23,34 +38,39 @@ class IntegratedSignalController:
             saturation_flow=0.5
         )
         
-        # Emergency priority controller
-        self.emergency_controller = EmergencyPriorityController(
-            detection_threshold=100.0,
-            preemption_threshold=80.0,
-            clearing_distance=5.0,
-            cooldown_duration=10.0
-        )
+        # Emergency priority controller (Day 3)
+        self.emergency_controller = EmergencyPriorityController()
+        
+        # Phase controller for signal state lookup
+        self.phase_controller = SignalPhaseController()
         
         # Mode tracking
         self.in_emergency_mode = False
-        self.last_normal_phase = PhaseType.NS_THROUGH
         
         print("✓ Integrated signal controller initialized")
     
     def update(self, intersection_state, current_time: float) -> str:
         """
-        Update signal control with emergency priority
+        Update signal control with emergency priority.
         
         Args:
-            intersection_state: Current traffic state
-            current_time: Simulation time
+            intersection_state: Current traffic state (IntersectionState)
+            current_time: Simulation time (seconds)
             
         Returns:
-            SUMO signal state string
+            SUMO signal state string (12 characters)
+            
+        Logic:
+            1. Update emergency controller (state machine)
+            2. Check if emergency is active
+            3. If active: return emergency phase signal
+            4. If not active: return normal controller signal
         """
-        # Check for emergency vehicles
-        is_emergency, emergency_phase, emergency_status = \
-            self.emergency_controller.update(intersection_state, current_time)
+        # Update emergency controller state machine
+        self.emergency_controller.update(intersection_state, current_time)
+        
+        # Get emergency controller decision
+        is_emergency, emergency_phase = self.emergency_controller.get_signal_command()
         
         if is_emergency:
             # EMERGENCY MODE - override normal control
@@ -58,14 +78,9 @@ class IntegratedSignalController:
                 print(f"⚠️  SWITCHING TO EMERGENCY MODE")
                 self.in_emergency_mode = True
             
-            # Force emergency phase
-            # Note: This is simplified - real implementation would handle
-            # transition through yellow/all-red properly
-            from control.signal_phases import SignalPhaseController
-            phase_controller = SignalPhaseController()
-            emergency_phase_config = phase_controller.get_phase(emergency_phase)
-            
-            return emergency_phase_config.sumo_state_green
+            # Get emergency phase signal state
+            phase_config = self.phase_controller.get_phase(emergency_phase)
+            return phase_config.sumo_state_green
         
         else:
             # NORMAL MODE - use adaptive control
@@ -82,9 +97,10 @@ class IntegratedSignalController:
         return {
             'mode': 'EMERGENCY' if self.in_emergency_mode else 'NORMAL',
             'emergency_state': emergency_info['state'],
-            'emergency_active': self.emergency_controller.is_emergency_active(),
-            'emergency_approach': emergency_info.get('approach'),
-            'emergency_distance': emergency_info.get('distance')
+            'emergency_active': emergency_info['is_active'],
+            'emergency_approach': emergency_info['emergency_approach'],
+            'emergency_distance': emergency_info['emergency_distance'],
+            'emergency_phase': emergency_info['emergency_phase']
         }
     
     def reset(self):
