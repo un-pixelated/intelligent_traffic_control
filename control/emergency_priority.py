@@ -436,4 +436,22 @@ class EmergencyPriorityController:
             'emergency_distance': self.emergency_distance,
             'emergency_phase': self.emergency_phase.name if self.emergency_phase else None
         }
+    
+    def reset(self):
+        """
+        Reset emergency controller to initial state.
+        
+        Ensures clean state for scenario reuse.
+        Must be called between simulation runs.
+        """
+        # Reset FSM to initial state
+        self.state = EmergencyState.NORMAL
+        
+        # Clear emergency tracking
+        self.emergency_approach = None
+        self.emergency_distance = None
+        self.emergency_phase = None
+        
+        # Reset timing
+        self.state_entry_time = 0.0
 

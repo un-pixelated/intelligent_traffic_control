@@ -204,9 +204,22 @@ class AdaptiveController:
         return current_phase_config.sumo_state_green
     
     def reset(self):
-        """Reset controller"""
+        """Reset controller state"""
         self.current_phase = PhaseType.NS_THROUGH
         self.phase_start_time = 0.0
         self.planned_green_time = self.min_green
         self.in_transition = False
-        self.phase_wait_times = {pt: 0.0 for pt in self.phase_wait_times.keys()}
+        self.transition_stage = 0  # ← ADDED
+        self.transition_target_phase = None  # ← ADDED
+        
+        # Clean up transition timing attributes if they exist
+        if hasattr(self, 'yellow_start_time'):  # ← ADDED
+            del self.yellow_start_time
+        if hasattr(self, 'all_red_start_time'):  # ← ADDED
+            del self.all_red_start_time
+        
+        # Reset wait times
+        self.phase_wait_times = {
+            PhaseType.NS_THROUGH: 0.0,
+            PhaseType.EW_THROUGH: 0.0
+        }

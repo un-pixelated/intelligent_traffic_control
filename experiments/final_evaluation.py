@@ -18,6 +18,23 @@ import numpy as np
 import pandas as pd
 
 
+def create_controllers():
+    """
+    Factory function to create fresh controller instances.
+    
+    Creates new instances for each scenario to ensure clean state.
+    This eliminates any risk of state leakage between scenarios.
+    
+    Returns:
+        List of (controller_instance, controller_name) tuples
+    """
+    return [
+        (FixedTimeController(ns_green_time=30, ew_green_time=30), "Fixed-Time"),
+        (AdaptiveController(min_green=10, max_green=60), "Adaptive"),
+        (IntegratedSignalController(), "Adaptive+Emergency")
+    ]
+
+
 def main():
     print("="*70)
     print(" INTELLIGENT TRAFFIC LIGHT CONTROL SYSTEM")
@@ -33,13 +50,6 @@ def main():
     # Initialize evaluator
     evaluator = TrafficControlEvaluator(config_file, intersection_config)
     
-    # Define controllers to test
-    controllers = [
-        (FixedTimeController(ns_green_time=30, ew_green_time=30), "Fixed-Time"),
-        (AdaptiveController(min_green=10, max_green=60), "Adaptive"),
-        (IntegratedSignalController(), "Adaptive+Emergency")
-    ]
-    
     # Get test scenarios
     scenarios = [
         ScenarioGenerator.get_baseline_scenario(),
@@ -47,8 +57,8 @@ def main():
         ScenarioGenerator.get_peak_traffic_scenario()
     ]
     
-    print(f"\nRunning {len(controllers)} controllers × {len(scenarios)} scenarios")
-    print(f"Total experiments: {len(controllers) * len(scenarios)}\n")
+    print(f"\nRunning 3 controllers × {len(scenarios)} scenarios")
+    print(f"Total experiments: {3 * len(scenarios)}\n")
     
     # Run all experiments
     all_results = {}
@@ -56,11 +66,12 @@ def main():
     for scenario in scenarios:
         all_results[scenario.name] = {}
         
+        # Create fresh controller instances for this scenario
+        # This ensures clean state - no reliance on reset()
+        controllers = create_controllers()
+        
         for controller, name in controllers:
-            # Reset controller for each scenario
-            if hasattr(controller, 'reset'):
-                controller.reset()
-            
+            # No reset needed - brand new instance
             metrics = evaluator.evaluate_controller(
                 controller, name, scenario, verbose=True
             )

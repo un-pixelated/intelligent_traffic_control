@@ -2,8 +2,7 @@
 Safety validator for signal transitions.
 Ensures all transitions are safe and follow traffic engineering standards.
 """
-
-from typing import Optional
+from typing import Optional, Tuple  # ← Added Tuple
 from control.signal_phases import PhaseType, SignalPhase
 import time
 

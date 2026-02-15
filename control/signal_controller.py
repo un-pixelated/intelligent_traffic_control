@@ -106,5 +106,5 @@ class IntegratedSignalController:
     def reset(self):
         """Reset controller state"""
         self.adaptive_controller.reset()
-        self.emergency_controller.reset()
-        self.in_emergency_mode = False
+        self.emergency_controller.reset()  # ← Now works (emergency controller has reset())
+        self.in_emergency_mode = False  # ← Already present, confirmed correct
